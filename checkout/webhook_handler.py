@@ -12,5 +12,5 @@ class StripeWH_Handler:
         """ Handle a generic/unknown/unexpected webhook event """
         return HttpResponse(
             content=f'Webhook Received: {event["type"]}',
-            status = 200
+            status=200
         )
