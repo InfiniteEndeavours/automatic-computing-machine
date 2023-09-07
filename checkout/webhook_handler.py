@@ -30,3 +30,12 @@ class StripeWH_Handler:
             content=f'Webhook Received: {event["type"]}',
             status=200
         )
+
+    def handle_charge_succeeded(self, event):
+        """ Handle the charge.succeeded webhook event """
+        print(f'Charge Succeeded Webhook Received: {event["type"]}')
+        intent = event.data.object
+        print(intent)
+        return HttpResponse(
+            content=f'Webhook Received: {event["type"]}',
+            status=200)

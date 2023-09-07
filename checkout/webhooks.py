@@ -17,7 +17,7 @@ def webhook(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     # Get webhook data and verify its signature
-    payload = request.body
+    payload = request.body.decode('utf-8')
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
     event = None
 
@@ -42,7 +42,9 @@ def webhook(request):
         'payment_intent.succeeded':
         handler.handle_payment_intent_succeeded,
         'payment_intent.payment_failed':
-        handler.handle_payment_intent_payment_failed
+        handler.handle_payment_intent_payment_failed,
+        'charge.succeeded':
+        handler.handle_charge_succeeded,
     }
 
     # Get the webhook type from Stripe
