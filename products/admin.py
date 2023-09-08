@@ -11,7 +11,8 @@ class ProductAdmin(admin.ModelAdmin):
         'rating',
         'image',
     )
-    list_filter = ('category', 'has_sizes')  # Add filters for category and has_sizes
+    # Add filters for category and has_sizes
+    list_filter = ('category', 'has_sizes')
     search_fields = ('name',)
     ordering = ('sku',)
 

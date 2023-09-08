@@ -24,7 +24,7 @@ def webhook(request):
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, wh_secret
-            )
+        )
     except ValueError as e:
         # Invalid Payload
         return HttpResponse(status=400)
@@ -43,8 +43,6 @@ def webhook(request):
         handler.handle_payment_intent_succeeded,
         'payment_intent.payment_failed':
         handler.handle_payment_intent_payment_failed,
-        'charge.succeeded':
-        handler.handle_charge_succeeded,
     }
 
     # Get the webhook type from Stripe
