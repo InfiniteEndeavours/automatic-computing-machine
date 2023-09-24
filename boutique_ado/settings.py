@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 # Load environment variables from .env
 load_dotenv()
@@ -25,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "")
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "")
+DEBUG = os.environ.get("DEBUG", "")
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(" ")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
 
 
 # Application definition
@@ -118,7 +119,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Allows auth using Username or Email
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True  # Email is required to register
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Email must be verified
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Email must be verified
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True  # Email must be entered twice
 ACCOUNT_USERNAME_MIN_LENGTH = 4  # Min username length
 LOGIN_URL = '/accounts/login/'  # Login URL
@@ -130,12 +131,17 @@ WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -189,8 +195,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
 STRIPE_CURRENCY = 'usd'
-STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
-STRIPE_WH_SECRET = os.getenv("STRIPE_WH_SECRET", "")
+STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+STRIPE_WH_SECRET = os.environ.get("STRIPE_WH_SECRET", "")
 
 DEFAULT_FROM_EMAIL = 'boutiqueado@example.com'
