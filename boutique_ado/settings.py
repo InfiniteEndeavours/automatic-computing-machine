@@ -117,7 +117,10 @@ SITE_ID = 1  # Used by Social Account App for CallBack URL
 # Allows auth using Username or Email
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True  # Email is required to register
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # Email must be verified
+if 'DEVELOPMENT' in os.environ:
+    ACCOUNT_EMAIL_VERIFICATION = 'none'
+else:
+    ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Email must be verified
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True  # Email must be entered twice
 ACCOUNT_USERNAME_MIN_LENGTH = 4  # Min username length
 LOGIN_URL = '/accounts/login/'  # Login URL
